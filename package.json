@@ -1,0 +1,22 @@
+{
+  "name": "v8-memory-mechanism",
+  "version": "0.0.1",
+  "description": "v8-memory-mechanism",
+  "main": "index.js",
+  "authors": {
+    "name": "dlg",
+    "email": "1399477141@qq.com"
+  },
+  "repository": "/v8-memory-mechanism",
+  "scripts": {
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs",
+    "start": "npm run dev"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "vuepress": "^1.0.0",
+    "@vuepress/plugin-back-to-top": "^1.0.0",
+    "@vuepress/plugin-medium-zoom": "^1.0.0"
+  }
+}
