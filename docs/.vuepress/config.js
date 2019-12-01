@@ -21,7 +21,7 @@ module.exports = {
     editLinkText: "",
     lastUpdated: false,
     sidebarDepth: 2, // 最大的深度为 2，它将同时提取 h2 和 h3 标题。即不仅显示h1,h2级，还会显示包含h3级组成的侧边栏
-    displayAllHeaders: true, // 设置为 true 来显示所有页面的标题链接。即会显示所有h1,h2标题组成的侧边栏
+    // displayAllHeaders: true, // 设置为 true 来显示所有页面的标题链接
     nav: [
       {
         text: "正文",
