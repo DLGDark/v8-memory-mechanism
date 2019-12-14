@@ -2,11 +2,11 @@
 
 在V8中,所有的JavaScript对象都是通过堆来进行分配的。Node提供了V8中内存使用量的查看方式，执行下面的代码，将得到输出的内存信息：
 
-![processMemoryUsage](/processMemoryUsage.png)
+![processMemoryUsage](/content/processMemoryUsage.png)
 
 在上述代码中，在memoryUsage()方法返回的3个属性中，heapTotal和heapUsed是V8的堆内存使用情况，前者是已申请到的堆内存，后者是当前使用的量。rss是驻留集大小, 是给这个进程分配了多少物理内存（占总分配内存的一部分），这些物理内存中包含堆、代码段、以及栈，external代表 V8 管理的，绑定到js的C++对象的内存使用情况。对象、字符串、闭包等存于堆内存。 变量存于栈内存，实际的JavaScript源代码存于代码段内存。使用 Worker 线程时， rss 将会是一个对整个进程有效的值，而其他字段只指向当前线程。下图为V8的堆示意图：
 
-![heapOne](/heapOne.png)
+![heapOne](/content/heapOne.png)
 
 当我们在代码中声明变量并赋值时，所使用对象的内存就分配在堆中。如果已申请的堆空闲内存不够分配新的对象，将继续申请堆内存，直到堆的大小超过V8的限制为止。
 

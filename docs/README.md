@@ -1,6 +1,6 @@
 ---
 home: true
-heroImage: /v8.png
+heroImage: /content/v8.png
 tagline: v8-memory-mechanism
 actionText: 开始学习 →
 actionLink: /start/
