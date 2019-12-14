@@ -5,6 +5,8 @@ module.exports = {
 
   description: description,
 
+  base: "/v8-memory-mechanism/",
+
   head: [
     ["meta", { name: "theme-color", content: "#3eaf7c" }],
     ["meta", { name: "apple-mobile-web-app-capable", content: "yes" }],
@@ -15,7 +17,7 @@ module.exports = {
   ],
 
   themeConfig: {
-    repo: "DLGDark/v8-memory-mechanism",
+    // repo: "DLGDark/v8-memory-mechanism",
     editLinks: false,
     docsDir: "docs",
     editLinkText: "",
