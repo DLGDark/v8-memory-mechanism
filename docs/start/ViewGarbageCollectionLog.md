@@ -40,7 +40,7 @@ node --prof test.js
 
 这将会在目录下得到一个V8.log日志文件。内容大致如下(内容过多，只截取了部分内容)：
 
-![v8log](/content/v8log.png)
+![v8log](/v8-memory-mechanism/content/v8log.png)
 
 V8提供了linux-tick-processor工具用于统计日志信息。该工具可以从此链接找到 [linux-tick-processor工具](https://github.com/v8/v8/tree/master/tools)
 

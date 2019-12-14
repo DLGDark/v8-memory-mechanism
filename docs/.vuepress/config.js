@@ -8,6 +8,7 @@ module.exports = {
   base: "/v8-memory-mechanism/",
 
   head: [
+    ['link', { rel: 'icon', href: '/content/favicon.ico' }],
     ["meta", { name: "theme-color", content: "#3eaf7c" }],
     ["meta", { name: "apple-mobile-web-app-capable", content: "yes" }],
     [

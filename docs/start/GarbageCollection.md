@@ -10,7 +10,7 @@ V8的垃圾回收策略主要基于分代式垃圾回收机制。在自动垃圾
 
 在V8中，主要将内存分为新生代和老生代两代。新生代中的对象为存活时间较短的对象，老生代中的对象为存活时间较长或常驻内存的对象。下图为V8的分代示意图：
 
-![heapTwo](/content/heapTwo.png)
+![heapTwo](/v8-memory-mechanism/content/heapTwo.png)
 
 V8堆的整体大小就是新生代所有内存空间加上老生代的内存空间。前面我们提及的--max-old-space-size命令行参数可以用于设置老生代内存空间的最大值，--max-new-space-size命令行参数则用于设置新生代内存空间的大小的。比较遗憾的是，这两个最大值需要在启动时就指定。这意味着V8使用的内存没有办法根据使用情况自动扩充，当内存分配过程中超过极限值时，就会引起进程出错。
 
@@ -35,7 +35,7 @@ Scavenge的缺点是只能使用堆内存中的一半，这是由于划分空间
 
 故此，V8的堆内存示意图应当如下图所示：
 
-![heapThree](/content/heapThree.png)
+![heapThree](/v8-memory-mechanism/content/heapThree.png)
 
 实际使用的堆内存是新生代中的两个semispace空间大小和老生代所用内存大小之和。
 
@@ -49,11 +49,11 @@ Scavenge的缺点是只能使用堆内存中的一半，这是由于划分空间
 
 在默认情况下，V8的对象分配主要集中在From空间中。对象从From空间中复制到To空间时，会检查它的内存地址来判断这个对象是否已经经历过一次Scavenge回收。如果已经经历过了，会将该对象从From空间复制到老生代空间中，如果没有，则复制到To空间中。这个晋升流程图如下图所示：
 
-![flowOne](/content/flowOne.png)
+![flowOne](/v8-memory-mechanism/content/flowOne.png)
 
 另一个判断条件是To空间的内存占用比。当要从From空间复制一个对象到To空间时，如果To空间已经使用了超过25%，则这个对象直接晋升到老生代空间中，这个晋升的判断示意图如下图所示：
 
-![flowTwo](/content/flowTwo.png)
+![flowTwo](/v8-memory-mechanism/content/flowTwo.png)
 
 :::tip 为什么要设置25%这个限制值？
 设置25%这个限制值的原因是当这次Scavenge回收完成后，这个To空间将变成From空间，接下来的内存分配将在这个空间中进行。如果占比过高，会影响后续的内存分配。
@@ -67,15 +67,15 @@ Scavenge的缺点是只能使用堆内存中的一半，这是由于划分空间
 
 Mark-Sweep是标记清除的意思，它分为标记和清除两个阶段。与Scavenge相比，Mark-Sweep并不将内存空间划分为两半，所以不存在浪费一半空间的行为。与Scavenge复制活着的对象不同，Mark-Sweep在标记阶段遍历堆中的所有对象，并标记活着的对象，在随后的清除阶段中，只清除没有被标记的对象。可以看出，**Scavenge中只复制活着的对象，而Mark-Sweep只清理死亡对象。活对象在新生代中只占较小部分，死对象在老生代中只占较小部分，这是两种回收方式能高效处理的原因。** 如下图所示，为Mark-Sweep在老生代空间中标记后的示意图，黑色部分标记为死亡的对象。
 
-![heapFour](/content/heapFour.png)
+![heapFour](/v8-memory-mechanism/content/heapFour.png)
 
 Mark-Sweep最大的问题是在进行一次标记清除回收后，内存空间会出现不连续的状态。这种内存碎片会对后续的内存分配造成问题，因为很可能出现需要分配一个大对象的情况，这时所有的碎片空间都无法完成此次分配，就会提前触发垃圾回收，而这次回收是不必要的。
 
 为了解决Mark-Sweep的内存碎片问题，Mark-Compact被提出来。Mark-Compact是标记整理的意思，是在Mark-Sweep的基础上演变而来的。它们的差别在于对象在标记为死亡后，在整理的过程中，将活着的对象往一端移动，移动完成后，直接清理掉边界外的内存。如下图所示，为Mark-Compact完成标记并移动存活对象后的示意图，白色格子为存活对象，深色格子为死亡对象，浅色格子为存活对象移动后留下的空洞。
 
-![heapFive](/content/heapFive.png)
+![heapFive](/v8-memory-mechanism/content/heapFive.png)
 
-![heapSix](/content/heapSix.png)
+![heapSix](/v8-memory-mechanism/content/heapSix.png)
 
 完成移动后，就可以直接清除最右边的存活对象后面的内存区域完成回收。
 
@@ -95,7 +95,7 @@ Mark-Sweep最大的问题是在进行一次标记清除回收后，内存空间�
 
 为了降低全堆垃圾回收带来的停顿时间，V8先从标记阶段入手，将原本要一口气停顿完成的动作改为增量标记（incremental marking），也就是拆分为许多小“步进”，每做完一“步进”就让Javascript应用逻辑执行一小会，垃圾回收与应用逻辑交替执行直到标记阶段完成。如下图所示，为增量标记示意图。
 
-![incrementMark](/content/incrementMark.png)
+![incrementMark](/v8-memory-mechanism/content/incrementMark.png)
 
 V8在经过增量标记的改进后，垃圾回收的最大停顿时间可以减少到原本的1/6左右。
 
