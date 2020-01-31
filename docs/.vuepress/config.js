@@ -57,6 +57,8 @@ module.exports = {
           title: "拓展阅读",
           children: [
             "",
+            "MemoryIndicators",
+            "LargeMemoryApplication"
           ]
         }
       ],
